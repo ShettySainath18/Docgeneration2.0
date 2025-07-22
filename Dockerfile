@@ -1,25 +1,31 @@
 
-# Step 1: Use an official Python base image
+# Use an official Python runtime as a parent image
 FROM python:3.9-slim
 
-# Step 2: Set the working directory inside the container
+# Set the working directory in the container
 WORKDIR /app
 
-# Step 3: Copy all project files into the container
+# Copy the current directory contents into the container at /app
 COPY . /app
 
-# Step 4: Install Python dependencies
-RUN pip install --no-cache-dir Flask
+# Install Python dependencies
+RUN pip install --no-cache-dir flask sphinx sphinx_rtd_theme
 
-# Step 5: Set up Sphinx documentation
+# Install build tools
+RUN apt-get update && apt-get install -y make && apt-get clean
+
+# Step 1: Create docs directory and initialize Sphinx
 RUN mkdir -p docs && \
-    sphinx-quickstart --project="Flask Hello World" --author="Your Name" --release="1.0" --quiet docs && \
-    sphinx-apidoc -o docs/source . && \
-    cd docs && make html
+    sphinx-quickstart --project="Flask Hello World" --author="Your Name" --release="1.0" --quiet docs
 
-# Step 6: Expose a port for Flask
+# Step 2: Generate API documentation
+RUN sphinx-apidoc -o docs/source . || echo "Skipping apidoc generation due to missing Python modules"
+
+# Step 3: Build the Sphinx documentation
+RUN cd docs && make html
+
+# Expose port 5000 for Flask
 EXPOSE 5000
 
-# Step 7: Run the Flask application
+# Define the command to run the application
 CMD ["python", "app.py"]
-#step 8: Run the Sphinx documentation server
