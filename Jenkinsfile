@@ -2,12 +2,29 @@ pipeline {
     agent any
 
     stages {
+        stage('Verify .github_token') {
+            steps {
+                script {
+                    // Check if the .github_token exists
+                    if (fileExists('.github_token')) {
+                        echo '.github_token file exists'
+                    } else {
+                        error '.github_token file not found. Please ensure it is placed in the workspace root.'
+                    }
+                }
+            }
+        }
+
         stage('Clone Repository') {
             steps {
                 script {
                     // Read the token from the file
                     def token = readFile('.github_token').trim()
+                    if (token == null || token.isEmpty()) {
+                        error 'GitHub token is empty. Please check the contents of .github_token.'
+                    }
                     // Use the token in the Git URL
+                    echo 'Cloning repository using GitHub token...'
                     git url: "https://${token}@github.com/ShettySainath18/automated_Documentation.git"
                 }
             }
@@ -56,13 +73,16 @@ pipeline {
 
     post {
         always {
-            bat '''
-            REM Stop and remove the Docker container
-            docker stop flask-container || exit 0
-            docker rm flask-container || exit 0
-            '''
+            script {
+                // Ensure the container is stopped and removed
+                echo 'Stopping and removing Docker container...'
+                bat '''
+                docker stop flask-container || exit 0
+                docker rm flask-container || exit 0
+                '''
+            }
 
-            // Clean up the workspace
+            // Clean up the workspace to ensure a fresh environment for the next build
             cleanWs()
         }
     }
