@@ -5,7 +5,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 // Use the credentialsId to securely provide the GitHub PAT
-                git credentialsId: 'github-pat', url: 'https://github.com/ShettySainath18/automated_Documentation.git'
+                git credentialsId: 'github-pat', url: 'https://github.com/ShettySainath18/Docgeneration2.0.git'
             }
         }
 
