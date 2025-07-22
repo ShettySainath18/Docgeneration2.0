@@ -9,7 +9,7 @@ WORKDIR /app
 COPY . /app
 
 # Step 4: Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir Flask
 
 # Step 5: Set up Sphinx documentation
 RUN mkdir -p docs && \
@@ -22,3 +22,4 @@ EXPOSE 5000
 
 # Step 7: Run the Flask application
 CMD ["python", "app.py"]
+#step 8: Run the Sphinx documentation server
