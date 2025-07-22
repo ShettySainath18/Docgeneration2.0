@@ -13,6 +13,7 @@ from flask import Flask
 app = Flask(__name__)
 
 
+
 @app.route('/')
 def home():
     """
@@ -27,7 +28,7 @@ def home():
         When accessed via GET request to '/', returns:
         "Hello, World!"
     """
-    return "Hello, World!"  
+    return f'Hello, World!'
 
 
 @app.route('/about')
