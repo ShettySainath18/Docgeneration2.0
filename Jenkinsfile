@@ -31,7 +31,7 @@ pipeline {
             steps {
                 bat '''
                 REM Copy the generated documentation from the container to Jenkins workspace
-                docker cp flask-container:/app/docs/_build/html ./generated-docs
+                docker cp flask-container:/app/docs/ ./generated-docs
                 '''
 
                 // Archive the built HTML documentation as artifacts
