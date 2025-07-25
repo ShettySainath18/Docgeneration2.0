@@ -9,6 +9,25 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    // Use the token securely
+                    withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_TOKEN')]) {
+                        // Replace 'SonarQubeScanner' with the actual tool name if different
+                        def scannerHome = tool 'SonarQubeScanner'
+                        bat """
+                            ${scannerHome}\\bin\\sonar-scanner ^
+                                -Dsonar.projectKey=automated_doc_generator ^
+                                -Dsonar.sources=. ^
+                                -Dsonar.host.url=http://localhost:9000 ^
+                                -Dsonar.login=$SONAR_TOKEN
+                        """
+                    }
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 bat '''
