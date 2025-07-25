@@ -15,7 +15,7 @@ pipeline {
                     // Use the token securely
                     withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_TOKEN')]) {
                         // Replace 'SonarQubeScanner' with the actual tool name if different
-                        def scannerHome = tool 'SonarQubeScanner'
+                        def scannerHome = tool 'SonarQube'
                         bat """
                             ${scannerHome}\\bin\\sonar-scanner ^
                                 -Dsonar.projectKey=automated_doc_generator ^
