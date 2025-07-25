@@ -20,7 +20,7 @@ pipeline {
                             ${scannerHome}\\bin\\sonar-scanner ^
                                 -Dsonar.projectKey=automated_doc_generator ^
                                 -Dsonar.sources=. ^
-                                -Dsonar.host.url=http://localhost:9000 ^
+                                -Dsonar.host.url=http://10.219.36.129:9000 ^
                                 -Dsonar.login=$SONAR_TOKEN
                         """
                     }
